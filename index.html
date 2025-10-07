@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>BNI Wireframe — Header & Footer</title>
+<title>BNI — Seek of the Week</title>
 
 <style>
   :root{
@@ -15,131 +15,364 @@
     --badge-opacity:0.6;          /* <<< Adjust Segwik badge TRANSPARENCY here (0–1) */
     --badge-size:20px;            /* Base font size in badge */
     --badge-gap:10px;             /* Spacing inside badge */
+    --ink:#1f2937;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --card:#ffffff;
+    --bg:#ffffff;
+    --radius:12px;
   }
 
-  /* Layout */
+  *{ box-sizing:border-box; }
   body{
     margin:0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    color:#1f2937;
-    background:#ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    background:var(--bg);
   }
   .site{
     max-width: var(--container-w);
     margin: 0 auto;
-    position: relative;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
 
-  /* Top red header bar */
-  .topbar{
-    background: var(--bni-red);
-    height: var(--header-h);       /* <<< Header height */
-  }
-
-  /* Brand row (logo below the red bar) */
+  .topbar{ background:var(--bni-red); height:var(--header-h); }
   .brand-row{
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 18px 20px;
-    border-bottom: 1px solid #eee;
+    display:flex; align-items:center; gap:16px;
+    padding:18px 20px; border-bottom:1px solid #eee;
   }
-  .brand-row .logo{
-    width: var(--brand-logo-w);    /* <<< Logo width */
-    height: auto;                  /* Keep aspect ratio */
-    display:block;
+  .brand-row .logo{ width:var(--brand-logo-w); height:auto; display:block; }
+
+  .content{ flex:1 0 auto; padding:20px; background:#fff; }
+
+  .title-row{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    margin:6px 0 18px;
+  }
+  .page-title{ margin:0; font-size:24px; font-weight:700; }
+  .btn{
+    appearance:none; border:0; background:var(--bni-red); color:#fff;
+    font-weight:700; padding:10px 14px; border-radius:8px; cursor:pointer;
+    font-size:14px; text-decoration:none; white-space:nowrap; display:inline-block;
   }
 
-  /* Main white space: extra long to preview scrolling */
-  .content{
-    flex: 1 0 auto;
-    background:#ffffff;
-    padding: 24px 20px;
-    min-height: 1800px;            /* <<< Super long space to scroll; adjust as needed */
+  /* Form card */
+  .form-wrap{
+    max-width: 760px;     /* form width */
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    box-shadow:0 14px 40px rgba(0,0,0,0.10);
   }
 
-  /* Footer */
+  .field{ margin-bottom:12px; }
+  .label{ display:block; font-size:13px; color:#111; margin-bottom:6px; font-weight:700; }
+  .row{ display:flex; gap:10px; align-items:center; }
+  .row > *{ flex:1; }
+  input[type="text"], select, textarea{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:10px 12px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px;
+    outline:none;
+    max-width:100%;
+  }
+  textarea{ min-height:90px; resize:vertical; }
+
+  .choices{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
+  .choice{
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:8px 12px;
+    cursor:pointer; user-select:none; font-size:13px; background:#fff;
+  }
+  .choice.active{ background:#fff0f1; border-color:#f2b7bf; color:#9a1027; font-weight:700; }
+
+  .actions{ margin-top:14px; }
+
   .footer{
-    background: var(--bni-red);
-    height: var(--footer-h);       /* <<< Footer height */
-    flex: 0 0 auto;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:#fff;
-    font-weight:600;
+    background:var(--bni-red); height:var(--footer-h);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600;
     letter-spacing:.3px;
   }
 
-  /* Fixed "Powered by Segwik" badge (persists everywhere) */
   .powered-by{
-    position: fixed;
-    right: 18px;
-    bottom: 18px;
-    z-index: 9999;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--badge-gap);
-    background: rgba(255,255,255,0.9);
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 999px;
-    padding: 8px 12px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    opacity: var(--badge-opacity);      /* <<< Transparency */
-    transition: opacity .2s ease;
-    backdrop-filter: blur(6px);
+    position:fixed; right:18px; bottom:18px; z-index:9999;
+    display:inline-flex; align-items:center; gap:var(--badge-gap);
+    background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.08);
+    border-radius:999px; padding:8px 12px; box-shadow:0 6px 18px rgba(0,0,0,0.08);
+    opacity:var(--badge-opacity); transition:opacity .2s ease; backdrop-filter:blur(6px);
   }
-  .powered-by:hover{
-    opacity: 1; /* Optional: fully visible on hover */
-  }
-  .powered-by span{
-    font-size: var(--badge-size);
-    line-height: 1;
-    color:#111827;
-    white-space: nowrap;
-  }
-  .powered-by img{
-    height: calc(var(--badge-size) + 6px); /* Scale logo relative to text */
-    width: auto;
-    display:block;
-  }
+  .powered-by:hover{ opacity:1; }
+  .powered-by span{ font-size:var(--badge-size); line-height:1; color:#111827; white-space:nowrap; }
+  .powered-by img{ height:calc(var(--badge-size) + 6px); width:auto; display:block; }
 
-  /* Keep badge above content in narrow screens too */
-  @media (max-width: 1280px){
-    .site{ max-width: 100%; }
-    .powered-by{ right: 12px; bottom: 12px; }
+  .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.4); z-index:9998; padding:20px;}
+  .modal.open{ display:flex; }
+  .modal-card{
+    background:#fff; border-radius:var(--radius); border:1px solid var(--line);
+    max-width:520px; width:100%; padding:18px; text-align:center;
   }
+  .modal h3{ margin:0 0 8px; font-size:18px; }
+  .modal p{ margin:0 0 16px; color:var(--muted); }
+  .hidden{ display:none !important; }
 </style>
 </head>
 
 <body>
   <div class="site">
-    <!-- RED HEADER BAR (adjust height via --header-h) -->
     <div class="topbar" aria-hidden="true"></div>
 
-    <!-- BRAND ROW WITH LOGO (adjust width via --brand-logo-w) -->
     <div class="brand-row">
       <img class="logo" src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854726598.png" alt="BNI Rock Solid Referrals Logo">
     </div>
 
-    <!-- LONG WHITE SPACE TO SCROLL -->
     <main class="content" role="main">
-      <p style="margin:0; color:#6b7280;">(Wireframe content area — intentionally long white space so you can preview header/footer and the sticky badge. Add sections here later.)</p>
+      <div class="title-row">
+        <h1 class="page-title">Seek of the Week</h1>
+        <a class="btn" id="viewRequestsTop" href="#">View Referral Requests Submissions</a>
+      </div>
+
+      <section class="form-wrap" aria-label="Seek of the Week form">
+        <!-- CHOICE: specific person / company / type of person -->
+        <div class="field">
+          <div class="label">I’m looking for a:</div>
+          <div class="choices" id="seekTypeChoices" role="tablist" aria-label="Seek Type">
+            <div class="choice active" data-type="person" role="tab" aria-selected="true">Specific Person</div>
+            <div class="choice" data-type="company" role="tab" aria-selected="false">Specific Company</div>
+            <div class="choice" data-type="persona" role="tab" aria-selected="false">Type of Person</div>
+          </div>
+        </div>
+
+        <!-- SPECIFIC PERSON (only for 'Specific Person') -->
+        <div id="fields-person">
+          <div class="row field">
+            <div>
+              <label class="label" for="personFirst">First Name</label>
+              <input id="personFirst" type="text">
+            </div>
+            <div>
+              <label class="label" for="personLast">Last Name</label>
+              <input id="personLast" type="text">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="personCompany">Company (optional)</label>
+            <input id="personCompany" type="text">
+          </div>
+        </div>
+
+        <!-- SPECIFIC COMPANY (only for 'Specific Company') -->
+        <div id="fields-company" class="hidden">
+          <div class="field">
+            <label class="label" for="companyName">Company</label>
+            <input id="companyName" type="text">
+          </div>
+        </div>
+
+        <!-- TYPE OF PERSON (only for 'Type of Person') -->
+        <div id="fields-persona" class="hidden">
+          <div class="row field">
+            <div>
+              <label class="label" for="personaIndustry">Industry</label>
+              <select id="personaIndustry">
+                <option value="">Select…</option>
+                <option>Accounting</option>
+                <option>Advertising & Marketing</option>
+                <option>Architecture</option>
+                <option>Automotive</option>
+                <option>Construction</option>
+                <option>Consulting</option>
+                <option>Education</option>
+                <option>Financial Services</option>
+                <option>Healthcare</option>
+                <option>Hospitality</option>
+                <option>Human Resources</option>
+                <option>Information Technology</option>
+                <option>Insurance</option>
+                <option>Legal Services</option>
+                <option>Manufacturing</option>
+                <option>Nonprofit</option>
+                <option>Real Estate</option>
+                <option>Retail & E-commerce</option>
+                <option>Sports & Fitness</option>
+                <option>Transportation & Logistics</option>
+              </select>
+            </div>
+            <div>
+              <label class="label" for="personaTitle">Job Title</label>
+              <input id="personaTitle" type="text">
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="personaSeniority">Experience / Seniority</label>
+            <select id="personaSeniority">
+              <option value="">Select…</option>
+              <option>Entry-Level</option>
+              <option>Mid-Level</option>
+              <option>Senior</option>
+              <option>Director</option>
+              <option>VP / C-Level</option>
+              <option>Owner / Founder</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- SHARED FIELDS -->
+        <div class="field">
+          <label class="label" for="whatActions">What Actions You Want Members To Take</label>
+          <textarea id="whatActions"></textarea>
+        </div>
+        <div class="field">
+          <label class="label" for="whatSay">What Things You Want Members To Say</label>
+          <textarea id="whatSay"></textarea>
+        </div>
+        <div class="field">
+          <label class="label" for="notes">Additional Notes</label>
+          <textarea id="notes"></textarea>
+        </div>
+
+        <div class="actions">
+          <button id="submitSeek" class="btn">Submit Request</button>
+        </div>
+      </section>
     </main>
 
-    <!-- RED FOOTER (adjust height via --footer-h) -->
     <footer class="footer" role="contentinfo">
       <div>BNI Rock Solid Referrals</div>
     </footer>
   </div>
 
-  <!-- STICKY "Powered by Segwik" BADGE (adjust transparency via --badge-opacity) -->
-  <a class="powered-by" href="https://segwik.com/" aria-label="Powered by Segwik (opens portal)">
+  <!-- STICKY "Powered by Segwik" BADGE -->
+  <a class="powered-by" href="https://segwik.com/" aria-label="Powered by Segwik (opens portal)" target="_blank" rel="noopener">
     <span>Powered by</span>
     <img src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854883923.png" alt="Segwik">
   </a>
+
+  <!-- Success Modal -->
+  <div class="modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="modal-card">
+      <h3 id="successTitle">Request Submitted</h3>
+      <p>Your Seek of the Week was submitted successfully.</p>
+      <div class="actions" style="justify-content:center;">
+        <a href="#" class="btn" id="goViewRequests">View Referral Requests</a>
+        <button class="btn" style="background:#f3f4f6; color:#111; border:1px solid var(--line);" id="closeModal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* Minimal local persistence for testing */
+const STORAGE_KEY = "bni_seeks_submit_only_v4";
+function saveSubmission(data){
+  const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  list.unshift(data);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+/* Helpers */
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+const uid = () => Math.random().toString(36).slice(2,9);
+
+/* Type switching (distinct fields per choice) */
+const typeChoices = $("#seekTypeChoices");
+const fields = {
+  person: $("#fields-person"),
+  company: $("#fields-company"),
+  persona: $("#fields-persona")
+};
+let currentType = "person";
+
+function switchType(type){
+  currentType = type;
+  $$(".choice", typeChoices).forEach(c => {
+    const active = c.dataset.type === type;
+    c.classList.toggle("active", active);
+    c.setAttribute("aria-selected", active ? "true" : "false");
+  });
+  Object.keys(fields).forEach(k => fields[k].classList.toggle("hidden", k !== type));
+}
+typeChoices.addEventListener("click", (e) => {
+  const t = e.target.closest(".choice");
+  if(!t) return;
+  switchType(t.dataset.type);
+});
+
+/* Links (replace with real URL) */
+const requestsHref = "#";
+$("#viewRequestsTop").href = requestsHref;
+$("#goViewRequests").href = requestsHref;
+
+/* Submit handling */
+function resetForm(){
+  $$('input[type="text"], textarea').forEach(i => i.value = "");
+  const sel1 = $("#personaSeniority"); if(sel1) sel1.value = "";
+  const sel2 = $("#personaIndustry");  if(sel2) sel2.value = "";
+  switchType("person");
+}
+
+$("#submitSeek").addEventListener("click", () => {
+  const payload = {
+    id: uid(),
+    type: currentType,
+    createdAt: Date.now(),
+    whatActions: $("#whatActions").value.trim(),
+    whatSay: $("#whatSay").value.trim(),
+    notes: $("#notes").value.trim()
+  };
+
+  if(currentType === "person"){
+    payload.personFirst = $("#personFirst").value.trim();
+    payload.personLast  = $("#personLast").value.trim();
+    payload.personCompany = $("#personCompany").value.trim();
+    if(!(payload.personFirst || payload.personLast)){
+      alert("Please provide at least a first or last name.");
+      return;
+    }
+  } else if(currentType === "company"){
+    payload.companyName = $("#companyName").value.trim();
+    if(!payload.companyName){
+      alert("Please provide a company name.");
+      return;
+    }
+  } else { // persona
+    payload.personaIndustry  = $("#personaIndustry").value;
+    payload.personaTitle     = $("#personaTitle").value.trim();
+    payload.personaSeniority = $("#personaSeniority").value;
+    if(!(payload.personaIndustry || payload.personaTitle || payload.personaSeniority)){
+      alert("Please provide at least one field (industry, job title, or seniority).");
+      return;
+    }
+  }
+
+  saveSubmission(payload);
+  $("#successModal").classList.add("open");
+});
+
+/* Close modal => reset form */
+$("#closeModal").addEventListener("click", () => {
+  $("#successModal").classList.remove("open");
+  resetForm();
+});
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && $("#successModal").classList.contains("open")){
+    $("#successModal").classList.remove("open");
+    resetForm();
+  }
+});
+$("#successModal").addEventListener("click", (e) => {
+  if(e.target.id === "successModal"){
+    $("#successModal").classList.remove("open");
+    resetForm();
+  }
+});
+</script>
 </body>
 </html>
