@@ -31,7 +31,7 @@
     background:var(--bg);
   }
   .site{
-    max-width: var(--container-w);
+    width: 100%;
     margin: 0 auto;
     min-height: 100vh;
     display: flex;
@@ -43,9 +43,27 @@
     display:flex; align-items:center; gap:16px;
     padding:18px 20px; border-bottom:1px solid #eee;
   }
-  .brand-row .logo{ width:var(--brand-logo-w); height:auto; display:block; }
+  .brand-row .logo{
+  width: clamp(200px, 50vw, var(--brand-logo-w));
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
 
-  .content{ flex:1 0 auto; padding:20px; background:#fff; }
+
+  .content{
+  flex: 1 0 auto;
+  padding: clamp(16px, 2vw, 32px);
+  background: #fff;
+
+  /* Center the card */
+  display: grid;
+  place-items: center;
+
+  /* make it fill the remaining viewport height between header/footer */
+  min-height: calc(100dvh - var(--header-h) - var(--footer-h) - 90px);
+}
+
 
   .title-row{
     display:flex; align-items:center; justify-content:space-between; gap:16px;
@@ -122,6 +140,44 @@
   .modal h3{ margin:0 0 8px; font-size:18px; }
   .modal p{ margin:0 0 16px; color:var(--muted); }
   .hidden{ display:none !important; }
+
+  .form-wrap{
+  width: 100%;
+  max-width: 760px;                 /* keep readable width */
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.10);
+  margin: 0;                        /* no auto-centering here; grid handles it */
+}
+
+.form-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.form-title{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* Mobile-friendly stacking */
+@media (max-width: 520px){
+  .form-header{
+    flex-wrap: wrap;
+  }
+  .form-header .btn{
+    width: 100%;
+    order: 2;              /* button drops below title */
+    text-align: center;
+  }
+}
+
 </style>
 </head>
 
@@ -134,12 +190,14 @@
     </div>
 
     <main class="content" role="main">
-      <div class="title-row">
-        <h1 class="page-title">Seek of the Week</h1>
-        <a class="btn" id="viewRequestsTop" href="#">View Referral Requests Submissions</a>
-      </div>
+
 
       <section class="form-wrap" aria-label="Seek of the Week form">
+       <div class="form-header">
+  <h2 class="form-title">Seek of the Week</h2>
+  <a class="btn" id="viewRequestsTop" href="#">View Referral Requests Submissions</a>
+</div> 
+
         <!-- CHOICE: specific person / company / type of person -->
         <div class="field">
           <div class="label">I’m looking for a:</div>
