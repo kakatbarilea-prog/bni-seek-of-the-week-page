@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BNI Wireframe — Header & Footer</title>
+
+<style>
+  :root{
+    --bni-red:#cf2030;            /* BNI red */
+    --container-w:1200px;         /* Page max width */
+    --header-h:30px;              /* <<< Adjust HEADER HEIGHT here */
+    --footer-h:30px;              /* <<< Adjust FOOTER HEIGHT here */
+    --brand-logo-w:700px;         /* <<< Adjust BNI LOGO WIDTH here (height auto) */
+    --badge-opacity:0.6;          /* <<< Adjust Segwik badge TRANSPARENCY here (0–1) */
+    --badge-size:20px;            /* Base font size in badge */
+    --badge-gap:10px;             /* Spacing inside badge */
+  }
+
+  /* Layout */
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color:#1f2937;
+    background:#ffffff;
+  }
+  .site{
+    max-width: var(--container-w);
+    margin: 0 auto;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top red header bar */
+  .topbar{
+    background: var(--bni-red);
+    height: var(--header-h);       /* <<< Header height */
+  }
+
+  /* Brand row (logo below the red bar) */
+  .brand-row{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #eee;
+  }
+  .brand-row .logo{
+    width: var(--brand-logo-w);    /* <<< Logo width */
+    height: auto;                  /* Keep aspect ratio */
+    display:block;
+  }
+
+  /* Main white space: extra long to preview scrolling */
+  .content{
+    flex: 1 0 auto;
+    background:#ffffff;
+    padding: 24px 20px;
+    min-height: 1800px;            /* <<< Super long space to scroll; adjust as needed */
+  }
+
+  /* Footer */
+  .footer{
+    background: var(--bni-red);
+    height: var(--footer-h);       /* <<< Footer height */
+    flex: 0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:600;
+    letter-spacing:.3px;
+  }
+
+  /* Fixed "Powered by Segwik" badge (persists everywhere) */
+  .powered-by{
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--badge-gap);
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 999px;
+    padding: 8px 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    opacity: var(--badge-opacity);      /* <<< Transparency */
+    transition: opacity .2s ease;
+    backdrop-filter: blur(6px);
+  }
+  .powered-by:hover{
+    opacity: 1; /* Optional: fully visible on hover */
+  }
+  .powered-by span{
+    font-size: var(--badge-size);
+    line-height: 1;
+    color:#111827;
+    white-space: nowrap;
+  }
+  .powered-by img{
+    height: calc(var(--badge-size) + 6px); /* Scale logo relative to text */
+    width: auto;
+    display:block;
+  }
+
+  /* Keep badge above content in narrow screens too */
+  @media (max-width: 1280px){
+    .site{ max-width: 100%; }
+    .powered-by{ right: 12px; bottom: 12px; }
+  }
+</style>
+</head>
+
+<body>
+  <div class="site">
+    <!-- RED HEADER BAR (adjust height via --header-h) -->
+    <div class="topbar" aria-hidden="true"></div>
+
+    <!-- BRAND ROW WITH LOGO (adjust width via --brand-logo-w) -->
+    <div class="brand-row">
+      <img class="logo" src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854726598.png" alt="BNI Rock Solid Referrals Logo">
+    </div>
+
+    <!-- LONG WHITE SPACE TO SCROLL -->
+    <main class="content" role="main">
+      <p style="margin:0; color:#6b7280;">(Wireframe content area — intentionally long white space so you can preview header/footer and the sticky badge. Add sections here later.)</p>
+    </main>
+
+    <!-- RED FOOTER (adjust height via --footer-h) -->
+    <footer class="footer" role="contentinfo">
+      <div>BNI Rock Solid Referrals</div>
+    </footer>
+  </div>
+
+  <!-- STICKY "Powered by Segwik" BADGE (adjust transparency via --badge-opacity) -->
+  <a class="powered-by" href="https://segwik.com/" aria-label="Powered by Segwik (opens portal)">
+    <span>Powered by</span>
+    <img src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854883923.png" alt="Segwik">
+  </a>
+</body>
+</html>
