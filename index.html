@@ -8,12 +8,12 @@
 <style>
   :root{
     --bni-red:#cf2030;            /* BNI red */
-    --container-w:1200px;         /* Page max width */
+    --container-w:1200px;         /* Max page width for header brand row */
     --header-h:30px;              /* <<< Adjust HEADER HEIGHT here */
     --footer-h:30px;              /* <<< Adjust FOOTER HEIGHT here */
     --brand-logo-w:700px;         /* <<< Adjust BNI LOGO WIDTH here (height auto) */
     --badge-opacity:0.6;          /* <<< Adjust Segwik badge TRANSPARENCY here (0–1) */
-    --badge-size:10px;            /* Base font size in badge */
+    --badge-size:20px;            /* Base font size in badge */
     --badge-gap:10px;             /* Spacing inside badge */
     --ink:#1f2937;
     --muted:#6b7280;
@@ -30,6 +30,8 @@
     color:var(--ink);
     background:var(--bg);
   }
+
+  /* Page frame */
   .site{
     width: 100%;
     margin: 0 auto;
@@ -37,53 +39,65 @@
     display: flex;
     flex-direction: column;
   }
-
   .topbar{ background:var(--bni-red); height:var(--header-h); }
   .brand-row{
+    width: min(100%, var(--container-w));
+    margin: 0 auto;
     display:flex; align-items:center; gap:16px;
     padding:18px 20px; border-bottom:1px solid #eee;
   }
   .brand-row .logo{
-  width: clamp(200px, 50vw, var(--brand-logo-w));
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-
-  .content{
-  flex: 1 0 auto;
-  padding: clamp(16px, 2vw, 32px);
-  background: #fff;
-
-  /* Center the card */
-  display: grid;
-  place-items: center;
-
-  /* make it fill the remaining viewport height between header/footer */
-  min-height: calc(100dvh - var(--header-h) - var(--footer-h) - 90px);
-}
-
-
-  .title-row{
-    display:flex; align-items:center; justify-content:space-between; gap:16px;
-    margin:6px 0 18px;
+    width: clamp(200px, 50vw, var(--brand-logo-w));
+    max-width: 100%;
+    height: auto;
+    display: block;
   }
-  .page-title{ margin:0; font-size:24px; font-weight:700; }
+
+  /* Content area centers its children vertically & horizontally */
+  .content{
+    flex: 1 0 auto;
+    padding: clamp(16px, 2vw, 32px);
+    background: #fff;
+
+    display: grid;
+    place-items: center;
+
+    /* fill remaining viewport height between header/footer */
+    min-height: calc(100dvh - var(--header-h) - var(--footer-h) - 90px);
+  }
+
+  /* Shell = same width as form, centered; header (title+button) sits OUTSIDE the form */
+  .shell{
+    width: 100%;
+    max-width: 760px;       /* <<< keep in sync with .form-wrap */
+  }
+  .shell-header{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    margin: 0 0 10px;
+  }
+  .page-title{
+    margin:0; font-size:30px; font-weight:800;
+  }
   .btn{
     appearance:none; border:0; background:var(--bni-red); color:#fff;
     font-weight:700; padding:10px 14px; border-radius:8px; cursor:pointer;
     font-size:14px; text-decoration:none; white-space:nowrap; display:inline-block;
   }
+  @media (max-width: 520px){
+    .shell-header{ flex-wrap:wrap; }
+    .shell-header .btn{ width:100%; order:2; text-align:center; }
+  }
 
   /* Form card */
   .form-wrap{
-    max-width: 760px;     /* form width */
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:20px;
-    box-shadow:0 14px 40px rgba(0,0,0,0.10);
+    width: 100%;
+    max-width: 760px;                 /* keep readable width */
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.10);
+    margin: 0;                        /* center handled by parent grid */
   }
 
   .field{ margin-bottom:12px; }
@@ -113,12 +127,14 @@
 
   .actions{ margin-top:14px; }
 
+  /* Footer */
   .footer{
     background:var(--bni-red); height:var(--footer-h);
     display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600;
     letter-spacing:.3px;
   }
 
+  /* Sticky "Powered by Segwik" badge */
   .powered-by{
     position:fixed; right:18px; bottom:18px; z-index:9999;
     display:inline-flex; align-items:center; gap:var(--badge-gap);
@@ -130,6 +146,7 @@
   .powered-by span{ font-size:var(--badge-size); line-height:1; color:#111827; white-space:nowrap; }
   .powered-by img{ height:calc(var(--badge-size) + 6px); width:auto; display:block; }
 
+  /* Modal */
   .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center;
     background:rgba(0,0,0,0.4); z-index:9998; padding:20px;}
   .modal.open{ display:flex; }
@@ -140,44 +157,6 @@
   .modal h3{ margin:0 0 8px; font-size:18px; }
   .modal p{ margin:0 0 16px; color:var(--muted); }
   .hidden{ display:none !important; }
-
-  .form-wrap{
-  width: 100%;
-  max-width: 760px;                 /* keep readable width */
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: 0 14px 40px rgba(0,0,0,0.10);
-  margin: 0;                        /* no auto-centering here; grid handles it */
-}
-
-.form-header{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.form-title{
-  margin: 0;
-  font-size: 22px;
-  font-weight: 800;
-}
-
-/* Mobile-friendly stacking */
-@media (max-width: 520px){
-  .form-header{
-    flex-wrap: wrap;
-  }
-  .form-header .btn{
-    width: 100%;
-    order: 2;              /* button drops below title */
-    text-align: center;
-  }
-}
-
 </style>
 </head>
 
@@ -190,116 +169,118 @@
     </div>
 
     <main class="content" role="main">
-
-
-      <section class="form-wrap" aria-label="Seek of the Week form">
-       <div class="form-header">
-  <h2 class="form-title">Seek of the Week</h2>
-  <a class="btn" id="viewRequestsTop" href="#">View Referral Requests Submissions</a>
-</div> 
-
-        <!-- CHOICE: specific person / company / type of person -->
-        <div class="field">
-          <div class="label">I’m looking for a:</div>
-          <div class="choices" id="seekTypeChoices" role="tablist" aria-label="Seek Type">
-            <div class="choice active" data-type="person" role="tab" aria-selected="true">Specific Person</div>
-            <div class="choice" data-type="company" role="tab" aria-selected="false">Specific Company</div>
-            <div class="choice" data-type="persona" role="tab" aria-selected="false">Type of Person</div>
-          </div>
+      <!-- HEADER OUTSIDE THE FORM, aligned to the same width -->
+      <div class="shell">
+        <div class="shell-header">
+          <h1 class="page-title">Seek of the Week</h1>
+          <a class="btn" id="viewRequestsTop" href="#">View Referral Requests Submissions</a>
         </div>
 
-        <!-- SPECIFIC PERSON (only for 'Specific Person') -->
-        <div id="fields-person">
-          <div class="row field">
-            <div>
-              <label class="label" for="personFirst">First Name</label>
-              <input id="personFirst" type="text">
-            </div>
-            <div>
-              <label class="label" for="personLast">Last Name</label>
-              <input id="personLast" type="text">
+        <!-- FORM CARD -->
+        <section class="form-wrap" aria-label="Seek of the Week form">
+          <!-- CHOICE: specific person / company / type of person -->
+          <div class="field">
+            <div class="label">I’m looking for a:</div>
+            <div class="choices" id="seekTypeChoices" role="tablist" aria-label="Seek Type">
+              <div class="choice active" data-type="person" role="tab" aria-selected="true">Specific Person</div>
+              <div class="choice" data-type="company" role="tab" aria-selected="false">Specific Company</div>
+              <div class="choice" data-type="persona" role="tab" aria-selected="false">Type of Person</div>
             </div>
           </div>
-          <div class="field">
-            <label class="label" for="personCompany">Company (optional)</label>
-            <input id="personCompany" type="text">
-          </div>
-        </div>
 
-        <!-- SPECIFIC COMPANY (only for 'Specific Company') -->
-        <div id="fields-company" class="hidden">
-          <div class="field">
-            <label class="label" for="companyName">Company</label>
-            <input id="companyName" type="text">
+          <!-- SPECIFIC PERSON (only for 'Specific Person') -->
+          <div id="fields-person">
+            <div class="row field">
+              <div>
+                <label class="label" for="personFirst">First Name</label>
+                <input id="personFirst" type="text">
+              </div>
+              <div>
+                <label class="label" for="personLast">Last Name</label>
+                <input id="personLast" type="text">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="personCompany">Company (optional)</label>
+              <input id="personCompany" type="text">
+            </div>
           </div>
-        </div>
 
-        <!-- TYPE OF PERSON (only for 'Type of Person') -->
-        <div id="fields-persona" class="hidden">
-          <div class="row field">
-            <div>
-              <label class="label" for="personaIndustry">Industry</label>
-              <select id="personaIndustry">
+          <!-- SPECIFIC COMPANY (only for 'Specific Company') -->
+          <div id="fields-company" class="hidden">
+            <div class="field">
+              <label class="label" for="companyName">Company</label>
+              <input id="companyName" type="text">
+            </div>
+          </div>
+
+          <!-- TYPE OF PERSON (only for 'Type of Person') -->
+          <div id="fields-persona" class="hidden">
+            <div class="row field">
+              <div>
+                <label class="label" for="personaIndustry">Industry</label>
+                <select id="personaIndustry">
+                  <option value="">Select…</option>
+                  <option>Accounting</option>
+                  <option>Advertising & Marketing</option>
+                  <option>Architecture</option>
+                  <option>Automotive</option>
+                  <option>Construction</option>
+                  <option>Consulting</option>
+                  <option>Education</option>
+                  <option>Financial Services</option>
+                  <option>Healthcare</option>
+                  <option>Hospitality</option>
+                  <option>Human Resources</option>
+                  <option>Information Technology</option>
+                  <option>Insurance</option>
+                  <option>Legal Services</option>
+                  <option>Manufacturing</option>
+                  <option>Nonprofit</option>
+                  <option>Real Estate</option>
+                  <option>Retail & E-commerce</option>
+                  <option>Sports & Fitness</option>
+                  <option>Transportation & Logistics</option>
+                </select>
+              </div>
+              <div>
+                <label class="label" for="personaTitle">Job Title</label>
+                <input id="personaTitle" type="text">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="personaSeniority">Experience / Seniority</label>
+              <select id="personaSeniority">
                 <option value="">Select…</option>
-                <option>Accounting</option>
-                <option>Advertising & Marketing</option>
-                <option>Architecture</option>
-                <option>Automotive</option>
-                <option>Construction</option>
-                <option>Consulting</option>
-                <option>Education</option>
-                <option>Financial Services</option>
-                <option>Healthcare</option>
-                <option>Hospitality</option>
-                <option>Human Resources</option>
-                <option>Information Technology</option>
-                <option>Insurance</option>
-                <option>Legal Services</option>
-                <option>Manufacturing</option>
-                <option>Nonprofit</option>
-                <option>Real Estate</option>
-                <option>Retail & E-commerce</option>
-                <option>Sports & Fitness</option>
-                <option>Transportation & Logistics</option>
+                <option>Entry-Level</option>
+                <option>Mid-Level</option>
+                <option>Senior</option>
+                <option>Director</option>
+                <option>VP / C-Level</option>
+                <option>Owner / Founder</option>
               </select>
             </div>
-            <div>
-              <label class="label" for="personaTitle">Job Title</label>
-              <input id="personaTitle" type="text">
-            </div>
+          </div>
+
+          <!-- SHARED FIELDS -->
+          <div class="field">
+            <label class="label" for="whatActions">What Actions You Want Members To Take</label>
+            <textarea id="whatActions"></textarea>
           </div>
           <div class="field">
-            <label class="label" for="personaSeniority">Experience / Seniority</label>
-            <select id="personaSeniority">
-              <option value="">Select…</option>
-              <option>Entry-Level</option>
-              <option>Mid-Level</option>
-              <option>Senior</option>
-              <option>Director</option>
-              <option>VP / C-Level</option>
-              <option>Owner / Founder</option>
-            </select>
+            <label class="label" for="whatSay">What Things You Want Members To Say</label>
+            <textarea id="whatSay"></textarea>
           </div>
-        </div>
+          <div class="field">
+            <label class="label" for="notes">Additional Notes</label>
+            <textarea id="notes"></textarea>
+          </div>
 
-        <!-- SHARED FIELDS -->
-        <div class="field">
-          <label class="label" for="whatActions">What Actions You Want Members To Take</label>
-          <textarea id="whatActions"></textarea>
-        </div>
-        <div class="field">
-          <label class="label" for="whatSay">What Things You Want Members To Say</label>
-          <textarea id="whatSay"></textarea>
-        </div>
-        <div class="field">
-          <label class="label" for="notes">Additional Notes</label>
-          <textarea id="notes"></textarea>
-        </div>
-
-        <div class="actions">
-          <button id="submitSeek" class="btn">Submit Request</button>
-        </div>
-      </section>
+          <div class="actions">
+            <button id="submitSeek" class="btn">Submit Request</button>
+          </div>
+        </section>
+      </div>
     </main>
 
     <footer class="footer" role="contentinfo">
@@ -327,7 +308,7 @@
 
 <script>
 /* Minimal local persistence for testing */
-const STORAGE_KEY = "bni_seeks_submit_only_v4";
+const STORAGE_KEY = "bni_seeks_submit_only_v5";
 function saveSubmission(data){
   const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   list.unshift(data);
