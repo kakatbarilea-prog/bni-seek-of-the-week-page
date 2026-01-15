@@ -1,418 +1,1275 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>BNI — Seek of the Week</title>
+<header class="rs-header" role="banner">
+  <div class="rs-header__inner">
+
+    <!-- Brand / Logo -->
+    <a class="rs-brand" href="https://kakatbarilea-prog.github.io/bni-homepage/" aria-label="BNI Rock Solid Referrals - Home">
+      <img
+        class="rs-brand__logo"
+        src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854726598.png"
+        alt="BNI Rock Solid Referrals"
+      />
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="rs-nav" aria-label="Primary navigation">
+      <a class="rs-nav__link is-active" href="https://kakatbarilea-prog.github.io/bni-homepage/">Home</a>
+
+      <!-- Dropdown (CSS-only) -->
+      <div class="rs-nav__dropdown">
+        <a class="rs-nav__link rs-nav__dropbtn" href="#" aria-haspopup="true" aria-expanded="false">
+          Chapter Members
+        </a>
+
+        <div class="rs-nav__menu" role="menu" aria-label="Chapter Members">
+          <a role="menuitem" href="https://kakatbarilea-prog.github.io/bni-chamber-members-directory/">Directory</a>
+          <a role="menuitem" href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-submissions/">Seeks of the Week</a>
+        </div>
+      </div>
+
+      <a class="rs-nav__link" href="#">Meetings &amp; Events</a>
+      <a class="rs-nav__link" href="#">Gallery</a>
+    </nav>
+
+    <!-- Right -->
+    <div class="rs-actions">
+      <a class="rs-btn rs-btn--primary rs-desktopOnly" href="#">Member Log-in</a>
+
+      <!-- Mobile menu button (JS toggles panel) -->
+      <button class="rs-iconbtn" id="rsMenuBtn" type="button" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 6h16a1 1 0 1 0 0-2H4a1 1 0 1 0 0 2Zm16 7H4a1 1 0 0 0 0 2h16a1 1 0 1 0 0-2Zm0 7H4a1 1 0 0 0 0 2h16a1 1 0 1 0 0-2Z"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Mobile Panel -->
+  <div class="rs-mobile" id="rsMobilePanel" hidden>
+    <div class="rs-mobile__inner">
+      <a href="https://kakatbarilea-prog.github.io/bni-homepage/" class="rs-mobile__link">Home</a>
+      <a href="https://kakatbarilea-prog.github.io/bni-chamber-members-directory/" class="rs-mobile__link">Chapter Members — Directory</a>
+      <a href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-submissions/" class="rs-mobile__link">Chapter Members — Seeks of the Week</a>
+      <a href="#" class="rs-mobile__link">Meetings &amp; Events</a>
+      <a href="#" class="rs-mobile__link">Gallery</a>
+
+      <div class="rs-mobile__cta">
+        <a class="rs-btn rs-btn--primary rs-btn--block" href="#">Member Log-in</a>
+      </div>
+    </div>
+  </div>
+</header>
 
 <style>
-  :root{
-    --bni-red:#cf2030;            /* BNI red */
-    --container-w:1200px;         /* Max page width for header brand row */
-    --header-h:30px;              /* <<< Adjust HEADER HEIGHT here */
-    --footer-h:30px;              /* <<< Adjust FOOTER HEIGHT here */
-    --brand-logo-w:400px;         /* <<< Adjust BNI LOGO WIDTH here (height auto) */
-    --badge-opacity:0.6;          /* <<< Adjust Segwik badge TRANSPARENCY here (0–1) */
-    --badge-size:15px;            /* Base font size in badge */
-    --badge-gap:10px;             /* Spacing inside badge */
-    --ink:#1f2937;
-    --muted:#6b7280;
-    --line:#e5e7eb;
-    --card:#ffffff;
-    --bg:#ffffff;
-    --radius:12px;
+  /* -------- HEADER ONLY VARIABLES (scoped) -------- */
+  .rs-header{
+    --rs-red:#CF2030;
+    --rs-ink:#111827;
+    --rs-line:#E5E7EB;
+    --rs-bg: rgba(255,255,255,.92);
+    --rs-shadow: 0 10px 26px rgba(0,0,0,.10);
+    --rs-h: 78px;
   }
 
-  *{ box-sizing:border-box; }
-  body{
-    margin:0;
+  /* Scope all typography + box sizing to header only */
+  .rs-header, .rs-header *{
     font-family: Arial, Helvetica, sans-serif;
-    color:var(--ink);
-    background:var(--bg);
+    box-sizing:border-box;
   }
 
-  /* Page frame */
-  .site{
-    width: 100%;
-    margin: 0 auto;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-  .topbar{ background:var(--bni-red); height:var(--header-h); }
-  .brand-row{
-    width: min(100%, var(--container-w));
-    margin: 0 auto;
-    display:flex; align-items:center; gap:16px;
-    padding:18px 20px; border-bottom:1px solid #eee;
-  }
-  .brand-row .logo{
-    width: clamp(200px, 50vw, var(--brand-logo-w));
-    max-width: 100%;
-    height: auto;
-    display: block;
+  .rs-header{
+    position:sticky; top:0; z-index:999;
+    width:100%;
+    background: var(--rs-bg);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(229,231,235,.95);
   }
 
-  /* Content area centers its children vertically & horizontally */
-  .content{
-    flex: 1 0 auto;
-    padding: clamp(16px, 2vw, 32px);
-    background: #fff;
-
-    display: grid;
-    place-items: center;
-
-    /* fill remaining viewport height between header/footer */
-    min-height: calc(100dvh - var(--header-h) - var(--footer-h) - 90px);
+  .rs-header__inner{
+    width:100%;
+    height:var(--rs-h);
+    padding:0 26px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
   }
 
-  /* Shell = same width as form, centered; header (title+button) sits OUTSIDE the form */
-  .shell{
-    width: 100%;
-    max-width: 760px;       /* <<< keep in sync with .form-wrap */
-  }
-  .shell-header{
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    margin: 0 0 10px;
-  }
-  .page-title{
-    margin:0; font-size:30px; font-weight:800;
-  }
-  .btn{
-    appearance:none; border:0; background:var(--bni-red); color:#fff;
-    font-weight:700; padding:10px 14px; border-radius:8px; cursor:pointer;
-    font-size:14px; text-decoration:none; white-space:nowrap; display:inline-block;
-  }
-  @media (max-width: 520px){
-    .shell-header{ flex-wrap:wrap; }
-    .shell-header .btn{ width:100%; order:2; text-align:center; }
+  .rs-brand{
+    display:flex;
+    align-items:center;
+    text-decoration:none;
+    flex:0 0 auto;
   }
 
-  /* Form card */
-  .form-wrap{
-    width: 100%;
-    max-width: 760px;                 /* keep readable width */
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 20px;
+  /* Prevent stretch */
+  .rs-brand__logo{
+    height:40px;
+    width:auto;
+    max-width:220px;
+    object-fit:contain;
+    display:block;
+  }
+
+  .rs-nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    flex:1;
+    min-width:0;
+  }
+
+  .rs-nav__link{
+    display:inline-flex;
+    align-items:center;
+    padding:10px 12px;
+    border-radius:12px;
+    font-weight:600;
+    font-size:14px;
+    color:var(--rs-ink);
+    text-decoration:none;
+    white-space:nowrap;
+    transition:.15s ease;
+  }
+  .rs-nav__link:hover{background:#F6F7FB}
+
+  .rs-nav__link.is-active{position:relative}
+  .rs-nav__link.is-active::after{
+    content:"";
+    position:absolute;
+    left:12px; right:12px; bottom:6px;
+    height:2px;
+    border-radius:999px;
+    background:var(--rs-red);
+  }
+
+  /* Dropdown (CSS-only) with hover bridge */
+  .rs-nav__dropdown{position:relative}
+  .rs-nav__dropbtn{cursor:default}
+
+  .rs-nav__menu{
+    position:absolute;
+    top:100%;
+    left:0;
+    margin-top:8px;
+    min-width:210px;
+    background:#fff;
+    border:1px solid var(--rs-line);
+    border-radius:14px;
+    box-shadow:var(--rs-shadow);
+    padding:8px;
+    display:none;
+    z-index:50;
+  }
+
+  .rs-nav__dropdown::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:100%;
+    width:240px;
+    height:18px;
+    background:transparent;
+    display:none;
+    z-index:40;
+  }
+
+  .rs-nav__menu a{
+    display:block;
+    padding:11px 12px;
+    border-radius:12px;
+    font-weight:600;
+    font-size:14px;
+    color:var(--rs-ink);
+    text-decoration:none;
+    transition:.15s ease;
+  }
+  .rs-nav__menu a:hover{background:#F6F7FB}
+
+  .rs-nav__dropdown:hover .rs-nav__menu,
+  .rs-nav__dropdown:focus-within .rs-nav__menu{
+    display:block;
+  }
+  .rs-nav__dropdown:hover::before,
+  .rs-nav__dropdown:focus-within::before{
+    display:block;
+  }
+
+  .rs-actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:10px;
+    flex:0 0 auto;
+  }
+
+  /* Button with hover animation */
+  .rs-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:11px 16px;
+    border-radius:12px;
+    border:1px solid var(--rs-line);
+    background:#fff;
+    font-weight:600;
+    font-size:14px;
+    color:var(--rs-ink);
+    text-decoration:none;
+    white-space:nowrap;
+    position:relative;
+    overflow:hidden;
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  }
+
+  .rs-btn--primary{
+    border-color:transparent;
+    background:var(--rs-red);
+    color:#fff;
+  }
+
+  /* subtle sheen animation */
+  .rs-btn--primary::after{
+    content:"";
+    position:absolute;
+    top:-30%;
+    left:-60%;
+    width:40%;
+    height:160%;
+    transform: rotate(20deg);
+    background: rgba(255,255,255,.25);
+    opacity:0;
+    transition: opacity .2s ease;
+  }
+
+  .rs-btn--primary:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(0,0,0,.14);
+    filter: brightness(.98);
+  }
+  .rs-btn--primary:hover::after{
+    opacity:1;
+    animation: rsSheen .9s ease forwards;
+  }
+
+  @keyframes rsSheen{
+    0%{left:-60%}
+    100%{left:120%}
+  }
+
+  .rs-desktopOnly{display:inline-flex}
+
+  /* Mobile hamburger */
+  .rs-iconbtn{
+    width:44px;height:44px;
+    border-radius:12px;
+    border:1px solid var(--rs-line);
+    background:#fff;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .rs-iconbtn:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(0,0,0,.10);
+  }
+  .rs-iconbtn svg{width:20px;height:20px; fill:#111827; display:block}
+
+  /* Mobile panel */
+  .rs-mobile{
+    border-top:1px solid var(--rs-line);
+    background:#fff;
+  }
+  .rs-mobile__inner{
+    padding:14px 18px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .rs-mobile__link{
+    padding:12px 12px;
+    border-radius:12px;
+    font-weight:600;
+    background:#F7F7FA;
+    border:1px solid #EEF0F6;
+    text-decoration:none;
+    color:var(--rs-ink);
+    transition:.15s ease;
+  }
+  .rs-mobile__link:hover{background:#F1F3F8}
+  .rs-mobile__cta{padding-top:6px}
+  .rs-btn--block{width:100%}
+
+  @media (max-width: 980px){
+    .rs-nav{display:none}
+    .rs-iconbtn{display:inline-flex}
+    .rs-desktopOnly{display:none}
+    .rs-header__inner{padding:0 16px}
+    .rs-brand__logo{height:36px; max-width:180px;}
+  }
+
+  @media (max-width: 420px){
+    .rs-header{--rs-h:72px}
+    .rs-brand__logo{max-width:150px;}
+  }
+</style>
+
+<script>
+  /* Minimal / necessary only: mobile hamburger open/close */
+  (function(){
+    const btn = document.getElementById('rsMenuBtn');
+    const panel = document.getElementById('rsMobilePanel');
+    if(!btn || !panel) return;
+
+    function close(){
+      panel.setAttribute('hidden','');
+      btn.setAttribute('aria-expanded','false');
+    }
+
+    btn.addEventListener('click', () => {
+      const isHidden = panel.hasAttribute('hidden');
+      if(isHidden){
+        panel.removeAttribute('hidden');
+        btn.setAttribute('aria-expanded','true');
+      }else{
+        close();
+      }
+    });
+
+    // Optional nice behavior: close after tapping a link
+    panel.addEventListener('click', (e) => {
+      if(e.target && e.target.tagName === 'A') close();
+    });
+
+    // Close if resizing back to desktop
+    window.addEventListener('resize', () => {
+      if(window.innerWidth > 980) close();
+    });
+  })();
+</script>
+
+
+
+
+<!--start-->
+
+<!-- =========================================================
+BNI ROCK SOLID — SEEK SUBMISSION FORM (DIRECTORY-MATCHED UI)
+- NO doctype/html/head
+- Uses rs-* conventions
+- Hero + tools layout consistent with Directory/Seeks Submissions
+- Seek type switching + localStorage persistence + success modal
+========================================================= -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<main class="rs-seekSubmit">
+
+  <!-- =========================
+       1) HERO
+  ========================= -->
+  <section class="rs-submitHero" aria-label="Seek submission hero">
+    <div class="rs-container rs-submitHero__grid">
+
+      <div class="rs-submitHero__copy">
+        <h1 class="rs-submitHero__title">Seek of the Week</h1>
+        <p class="rs-submitHero__sub">
+          Tell the chapter what you’re looking for — a specific person, a specific company, or a type of person —
+          and we’ll help you turn introductions into real opportunities.
+        </p>
+
+        <div class="rs-submitHero__actions">
+          <!-- ✅ NOW matches primary button style + sheen animation -->
+          <a class="rs-btn rs-btn--primary rs-btn--sheen" id="rsViewSubmissionsTop" href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-submissions/">
+            <i class="fa-solid fa-list"></i> View submissions
+          </a>
+        </div>
+      </div>
+
+      <div class="rs-submitHero__visual" aria-label="Seek form visual">
+        <div class="rs-imgPh rs-imgPh--submitHero">
+          <div class="rs-imgPh__label">
+            <strong>IMAGE PLACEHOLDER</strong><br>
+            Size: <strong>540px × 260px</strong><br>
+            Visual: Professional networking / warm introductions / referrals illustration.<br>
+            Style: Bright, modern, subtle.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =========================
+       2) FORM CARD
+  ========================= -->
+  <section class="rs-submitWrap" aria-label="Seek form area">
+    <div class="rs-container">
+
+      <section class="rs-formCard" aria-label="Seek of the Week form">
+
+        <!-- Card header row -->
+        <div class="rs-formHeader">
+          <div class="rs-formHeader__title">
+            <div class="rs-formKicker">New Request</div>
+            <div class="rs-formTitle">What are you looking for?</div>
+          </div>
+        </div>
+
+        <!-- Seek type chips -->
+        <div class="rs-field">
+          <div class="rs-label">I’m looking for a:</div>
+          <div class="rs-choiceRow" id="rsSeekTypeChoices" role="tablist" aria-label="Seek Type">
+            <button class="rs-choice is-active" data-type="person" role="tab" aria-selected="true" type="button">
+              <i class="fa-solid fa-user"></i> Specific Person
+            </button>
+
+            <button class="rs-choice" data-type="company" role="tab" aria-selected="false" type="button">
+              <i class="fa-solid fa-building"></i> Specific Company
+            </button>
+
+            <button class="rs-choice" data-type="persona" role="tab" aria-selected="false" type="button">
+              <i class="fa-solid fa-users"></i> Type of Person
+            </button>
+          </div>
+        </div>
+
+        <!-- SPECIFIC PERSON -->
+        <div id="rsFieldsPerson">
+          <div class="rs-row rs-field">
+            <div>
+              <label class="rs-label" for="rsPersonFirst">First Name</label>
+              <input id="rsPersonFirst" type="text" placeholder="First name">
+            </div>
+            <div>
+              <label class="rs-label" for="rsPersonLast">Last Name</label>
+              <input id="rsPersonLast" type="text" placeholder="Last name">
+            </div>
+          </div>
+
+          <div class="rs-field">
+            <label class="rs-label" for="rsPersonCompany">Company (optional)</label>
+            <input id="rsPersonCompany" type="text" placeholder="Company name (optional)">
+          </div>
+        </div>
+
+        <!-- SPECIFIC COMPANY -->
+        <div id="rsFieldsCompany" class="rs-hidden">
+          <div class="rs-field">
+            <label class="rs-label" for="rsCompanyName">Company</label>
+            <input id="rsCompanyName" type="text" placeholder="Company name">
+          </div>
+        </div>
+
+        <!-- TYPE OF PERSON -->
+        <div id="rsFieldsPersona" class="rs-hidden">
+          <div class="rs-row rs-field">
+            <div>
+              <label class="rs-label" for="rsPersonaIndustry">Industry</label>
+              <select id="rsPersonaIndustry">
+                <option value="">Select…</option>
+                <option>Accounting</option>
+                <option>Advertising & Marketing</option>
+                <option>Architecture</option>
+                <option>Automotive</option>
+                <option>Construction</option>
+                <option>Consulting</option>
+                <option>Education</option>
+                <option>Financial Services</option>
+                <option>Healthcare</option>
+                <option>Hospitality</option>
+                <option>Human Resources</option>
+                <option>Information Technology</option>
+                <option>Insurance</option>
+                <option>Legal Services</option>
+                <option>Manufacturing</option>
+                <option>Nonprofit</option>
+                <option>Real Estate</option>
+                <option>Retail & E-commerce</option>
+                <option>Sports & Fitness</option>
+                <option>Transportation & Logistics</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="rs-label" for="rsPersonaTitle">Job Title</label>
+              <input id="rsPersonaTitle" type="text" placeholder="e.g., Office Manager">
+            </div>
+          </div>
+
+          <div class="rs-field">
+            <label class="rs-label" for="rsPersonaSeniority">Experience / Seniority</label>
+            <select id="rsPersonaSeniority">
+              <option value="">Select…</option>
+              <option>Entry-Level</option>
+              <option>Mid-Level</option>
+              <option>Senior</option>
+              <option>Director</option>
+              <option>VP / C-Level</option>
+              <option>Owner / Founder</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="rs-divider">
+
+        <!-- Shared fields -->
+        <div class="rs-field">
+          <label class="rs-label" for="rsWhatActions">What Actions You Want Members To Take</label>
+          <textarea id="rsWhatActions" placeholder="Example: Introduce us by email + include both parties..."></textarea>
+        </div>
+
+        <div class="rs-field">
+          <label class="rs-label" for="rsWhatSay">What Things You Want Members To Say</label>
+          <textarea id="rsWhatSay" placeholder="Example: ‘I thought of you because you’re great at…’"></textarea>
+        </div>
+
+        <div class="rs-field">
+          <label class="rs-label" for="rsNotes">Additional Notes</label>
+          <textarea id="rsNotes" placeholder="Anything that helps members make the right intro (location, timing, preference)..."></textarea>
+        </div>
+
+        <div class="rs-actions">
+          <button id="rsSubmitSeek" class="rs-btn rs-btn--primary rs-btn--sheen" type="button">
+            <i class="fa-solid fa-paper-plane"></i> Submit Request
+          </button>
+
+          <!-- ✅ Proper muted secondary button -->
+          <button id="rsResetSeek" class="rs-btn rs-btn--muted" type="button">
+            Reset
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+  </section>
+
+</main>
+
+
+<!-- =========================
+     SUCCESS MODAL
+========================= -->
+<div class="rs-modal" id="rsSuccessModal" role="dialog" aria-modal="true" aria-labelledby="rsSuccessTitle">
+  <div class="rs-modalCard">
+    <div class="rs-modalIcon"><i class="fa-solid fa-circle-check"></i></div>
+    <h3 id="rsSuccessTitle">Request Submitted</h3>
+    <p>Your Seek of the Week was submitted successfully.</p>
+
+    <div class="rs-modalActions">
+      <a id="rsGoViewRequests" href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-submissions/" class="rs-btn rs-btn--primary rs-btn--sheen">
+        <i class="fa-solid fa-list"></i> View submissions
+      </a>
+      <button class="rs-btn rs-btn--muted" id="rsCloseModal" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  /* =========================================================
+     SEEK SUBMISSION STYLES (SCOPED, MATCH DIRECTORY TOKENS)
+  ========================================================= */
+
+  .rs-seekSubmit{
+    --rs-red:#CF2030;
+    --rs-ink:#111827;
+    --rs-muted:#6B7280;
+    --rs-line:#E5E7EB;
+    --rs-soft:#F6F7FB;
+    --rs-soft2:#FBFBFD;
+    --rs-shadow: 0 12px 28px rgba(0,0,0,.08);
+
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--rs-ink);
+    background:#fff;
+  }
+  .rs-seekSubmit, .rs-seekSubmit *{ box-sizing:border-box; }
+
+  .rs-container{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:0 22px;
+  }
+
+  /* Hero */
+  .rs-submitHero{
+    padding:42px 0 24px;
+    background:
+      radial-gradient(900px 420px at 15% 0%, rgba(207,32,48,.10), rgba(255,255,255,0) 55%),
+      radial-gradient(900px 420px at 85% 25%, rgba(17,24,39,.06), rgba(255,255,255,0) 55%);
+  }
+  .rs-submitHero__grid{
+    display:grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap:20px;
+    align-items:center;
+  }
+  .rs-submitHero__title{
+    margin:0;
+    font-size:40px;
+    letter-spacing:-.03em;
+    line-height:1.08;
+    font-weight:700;
+  }
+  .rs-submitHero__sub{
+    margin:12px 0 14px;
+    color:var(--rs-muted);
+    line-height:1.7;
+    max-width:680px;
+    font-weight:400;
+  }
+  .rs-submitHero__actions{ margin-top:14px; }
+
+  /* Image placeholder */
+  .rs-imgPh{
+    width:100%;
+    border-radius:18px;
+    border:1px dashed rgba(17,24,39,.22);
+    background: linear-gradient(180deg, #fff, #FBFBFD);
+    box-shadow: 0 12px 26px rgba(0,0,0,.06);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    text-align:center;
+    color:#6B7280;
+    line-height:1.5;
+  }
+  .rs-imgPh__label{ font-size:13px; max-width:520px; }
+  .rs-imgPh--submitHero{ height:260px; }
+
+  /* Buttons */
+  .rs-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:11px 16px;
+    border-radius:12px;
+    border:1px solid rgba(17,24,39,.12);
+    background:#fff;
+    font-weight:600;
+    font-size:14px;
+    color:#111827;
+    text-decoration:none;
+    white-space:nowrap;
+    gap:10px;
+    cursor:pointer;
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  }
+  .rs-btn:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 12px 22px rgba(0,0,0,.10);
+  }
+  .rs-btn--primary{
+    border-color:transparent;
+    background:var(--rs-red);
+    color:#fff;
+  }
+  .rs-btn--primary:hover{
+    box-shadow: 0 14px 26px rgba(207,32,48,.18);
+    filter: brightness(.98);
+  }
+
+  /* ✅ Muted secondary button (not red) */
+  .rs-btn--muted{
+    font-weight:600;
+    color:#374151;
+    background:rgba(17,24,39,.04);
+    border:1px solid rgba(17,24,39,.12);
+  }
+  .rs-btn--muted:hover{
+    filter:none;
+  }
+
+  /* ✅ Sheen animation (matches header primary button) */
+  .rs-btn--sheen{
+    position:relative;
+    overflow:hidden;
+  }
+  .rs-btn--sheen::after{
+    content:"";
+    position:absolute;
+    top:-30%;
+    left:-60%;
+    width:40%;
+    height:160%;
+    transform: rotate(20deg);
+    background: rgba(255,255,255,.25);
+    opacity:0;
+    transition: opacity .2s ease;
+  }
+  .rs-btn--sheen:hover::after{
+    opacity:1;
+    animation: rsSheen .9s ease forwards;
+  }
+  @keyframes rsSheen{
+    0%{ left:-60%; }
+    100%{ left:120%; }
+  }
+
+  /* Form wrap */
+  .rs-submitWrap{ padding:10px 0 60px; }
+  .rs-formCard{
+    max-width:980px;
+    margin:0 auto;
+    border:1px solid rgba(17,24,39,.10);
+    background:#fff;
+    border-radius:18px;
     box-shadow: 0 14px 40px rgba(0,0,0,0.10);
-    margin: 0;                        /* center handled by parent grid */
+    padding:18px;
   }
 
-  .field{ margin-bottom:12px; }
-  .label{ display:block; font-size:13px; color:#111; margin-bottom:6px; font-weight:700; }
-  .row{ display:flex; gap:10px; align-items:center; }
-  .row > *{ flex:1; }
+  .rs-formHeader{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+    padding:6px 6px 14px;
+  }
+  /* ✅ normalized weights (no 900 everywhere) */
+  .rs-formKicker{
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#6B7280;
+    font-weight:600;
+  }
+  .rs-formTitle{
+    margin-top:6px;
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:-.02em;
+  }
+  .rs-formHint{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:700;
+    border:1px solid rgba(17,24,39,.12);
+    background:rgba(17,24,39,.04);
+    color:#111827;
+  }
+
+  /* Fields */
+  .rs-field{ margin-bottom:12px; }
+  .rs-label{
+    display:block;
+    font-size:13px;
+    color:#111;
+    margin-bottom:6px;
+    font-weight:700;
+  }
+
+  .rs-row{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .rs-row > *{ flex:1; }
+
   input[type="text"], select, textarea{
     width:100%;
-    border:1px solid var(--line);
-    border-radius:8px;
-    padding:10px 12px;
+    border:1px solid rgba(17,24,39,.14);
+    border-radius:14px;
+    padding:12px 12px;
     font-family: Arial, Helvetica, sans-serif;
     font-size:14px;
     outline:none;
-    max-width:100%;
+    background:#fff;
+    transition:.18s ease;
   }
-  textarea{ min-height:90px; resize:vertical; }
+  textarea{ min-height:96px; resize:vertical; }
 
-  .choices{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px; }
-  .choice{
-    border:1px solid var(--line);
+  input[type="text"]:focus, select:focus, textarea:focus{
+    border-color: rgba(207,32,48,.28);
+    box-shadow: 0 12px 26px rgba(207,32,48,.10);
+  }
+
+  /* Choice buttons */
+  .rs-choiceRow{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:4px;
+  }
+  .rs-choice{
+    border:1px solid rgba(17,24,39,.12);
     border-radius:999px;
-    padding:8px 12px;
-    cursor:pointer; user-select:none; font-size:13px; background:#fff;
+    padding:10px 12px;
+    cursor:pointer;
+    user-select:none;
+    font-size:13px;
+    background:#fff;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
+    color:#374151;
+    transition:.18s ease;
   }
-  .choice.active{ background:#fff0f1; border-color:#f2b7bf; color:#9a1027; font-weight:700; }
-
-  .actions{ margin-top:14px; }
-
-  /* Footer */
-  .footer{
-    background:var(--bni-red); height:var(--footer-h);
-    display:flex; align-items:center; justify-content:center; color:#fff; font-weight:600;
-    letter-spacing:.3px;
+  .rs-choice:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(0,0,0,.06);
+  }
+  .rs-choice.is-active{
+    background:rgba(207,32,48,.10);
+    border-color:rgba(207,32,48,.18);
+    color:#9a1027;
+    font-weight:600;
   }
 
-  /* Sticky "Powered by Segwik" badge */
-  .powered-by{
-    position:fixed; right:18px; bottom:18px; z-index:9999;
-    display:inline-flex; align-items:center; gap:var(--badge-gap);
-    background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.08);
-    border-radius:999px; padding:8px 12px; box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    opacity:var(--badge-opacity); transition:opacity .2s ease; backdrop-filter:blur(6px);
+  .rs-divider{
+    border:none;
+    height:1px;
+    background:rgba(17,24,39,.10);
+    margin:14px 0 16px;
   }
-  .powered-by:hover{ opacity:1; }
-  .powered-by span{ font-size:var(--badge-size); line-height:1; color:#111827; white-space:nowrap; }
-  .powered-by img{ height:calc(var(--badge-size) + 6px); width:auto; display:block; }
+
+  .rs-actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    margin-top:12px;
+  }
+
+  .rs-hidden{ display:none !important; }
 
   /* Modal */
-  .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center;
-    background:rgba(0,0,0,0.4); z-index:9998; padding:20px;}
-  .modal.open{ display:flex; }
-  .modal-card{
-    background:#fff; border-radius:var(--radius); border:1px solid var(--line);
-    max-width:520px; width:100%; padding:18px; text-align:center;
+  .rs-modal{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,.45);
+    z-index:9998;
+    padding:20px;
   }
-  .modal h3{ margin:0 0 8px; font-size:18px; }
-  .modal p{ margin:0 0 16px; color:var(--muted); }
-  .hidden{ display:none !important; }
+  .rs-modal.open{ display:flex; }
+
+  .rs-modalCard{
+    background:#fff;
+    border-radius:18px;
+    border:1px solid rgba(17,24,39,.10);
+    box-shadow: 0 18px 60px rgba(0,0,0,.18);
+    max-width:520px;
+    width:100%;
+    padding:18px;
+    text-align:center;
+  }
+
+  .rs-modalIcon{
+    width:58px;height:58px;
+    border-radius:18px;
+    background: rgba(207,32,48,.10);
+    color: var(--rs-red);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 10px;
+    font-size:20px;
+    font-weight:900;
+  }
+
+  .rs-modalCard h3{
+    margin:0 0 6px;
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:-.02em;
+  }
+  .rs-modalCard p{
+    margin:0 0 14px;
+    color:#6B7280;
+    line-height:1.6;
+    font-size:14px;
+  }
+  .rs-modalActions{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 980px){
+    .rs-submitHero__grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width: 520px){
+    .rs-container{ padding:0 16px; }
+    .rs-submitHero{ padding:32px 0 20px; }
+    .rs-submitHero__title{ font-size:30px; }
+    .rs-imgPh--submitHero{ height:220px; }
+
+    .rs-row{ flex-direction:column; }
+    .rs-actions{ justify-content:stretch; }
+    .rs-actions .rs-btn{ width:100%; }
+  }
 </style>
-</head>
 
-<body>
-  <div class="site">
-    <div class="topbar" aria-hidden="true"></div>
-
-    <div class="brand-row">
-      <img class="logo" src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854726598.png" alt="BNI Rock Solid Referrals Logo">
-    </div>
-
-    <main class="content" role="main">
-      <!-- HEADER OUTSIDE THE FORM, aligned to the same width -->
-      <div class="shell">
-        <div class="shell-header">
-          <h1 class="page-title">Seek of the Week</h1>
-          <a class="btn" id="viewRequestsTop" href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-page">View Seek of The Week Submissions</a>
-        </div>
-
-        <!-- FORM CARD -->
-        <section class="form-wrap" aria-label="Seek of the Week form">
-          <!-- CHOICE: specific person / company / type of person -->
-          <div class="field">
-            <div class="label">I’m looking for a:</div>
-            <div class="choices" id="seekTypeChoices" role="tablist" aria-label="Seek Type">
-              <div class="choice active" data-type="person" role="tab" aria-selected="true">Specific Person</div>
-              <div class="choice" data-type="company" role="tab" aria-selected="false">Specific Company</div>
-              <div class="choice" data-type="persona" role="tab" aria-selected="false">Type of Person</div>
-            </div>
-          </div>
-
-          <!-- SPECIFIC PERSON (only for 'Specific Person') -->
-          <div id="fields-person">
-            <div class="row field">
-              <div>
-                <label class="label" for="personFirst">First Name</label>
-                <input id="personFirst" type="text">
-              </div>
-              <div>
-                <label class="label" for="personLast">Last Name</label>
-                <input id="personLast" type="text">
-              </div>
-            </div>
-            <div class="field">
-              <label class="label" for="personCompany">Company (optional)</label>
-              <input id="personCompany" type="text">
-            </div>
-          </div>
-
-          <!-- SPECIFIC COMPANY (only for 'Specific Company') -->
-          <div id="fields-company" class="hidden">
-            <div class="field">
-              <label class="label" for="companyName">Company</label>
-              <input id="companyName" type="text">
-            </div>
-          </div>
-
-          <!-- TYPE OF PERSON (only for 'Type of Person') -->
-          <div id="fields-persona" class="hidden">
-            <div class="row field">
-              <div>
-                <label class="label" for="personaIndustry">Industry</label>
-                <select id="personaIndustry">
-                  <option value="">Select…</option>
-                  <option>Accounting</option>
-                  <option>Advertising & Marketing</option>
-                  <option>Architecture</option>
-                  <option>Automotive</option>
-                  <option>Construction</option>
-                  <option>Consulting</option>
-                  <option>Education</option>
-                  <option>Financial Services</option>
-                  <option>Healthcare</option>
-                  <option>Hospitality</option>
-                  <option>Human Resources</option>
-                  <option>Information Technology</option>
-                  <option>Insurance</option>
-                  <option>Legal Services</option>
-                  <option>Manufacturing</option>
-                  <option>Nonprofit</option>
-                  <option>Real Estate</option>
-                  <option>Retail & E-commerce</option>
-                  <option>Sports & Fitness</option>
-                  <option>Transportation & Logistics</option>
-                </select>
-              </div>
-              <div>
-                <label class="label" for="personaTitle">Job Title</label>
-                <input id="personaTitle" type="text">
-              </div>
-            </div>
-            <div class="field">
-              <label class="label" for="personaSeniority">Experience / Seniority</label>
-              <select id="personaSeniority">
-                <option value="">Select…</option>
-                <option>Entry-Level</option>
-                <option>Mid-Level</option>
-                <option>Senior</option>
-                <option>Director</option>
-                <option>VP / C-Level</option>
-                <option>Owner / Founder</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- SHARED FIELDS -->
-          <div class="field">
-            <label class="label" for="whatActions">What Actions You Want Members To Take</label>
-            <textarea id="whatActions"></textarea>
-          </div>
-          <div class="field">
-            <label class="label" for="whatSay">What Things You Want Members To Say</label>
-            <textarea id="whatSay"></textarea>
-          </div>
-          <div class="field">
-            <label class="label" for="notes">Additional Notes</label>
-            <textarea id="notes"></textarea>
-          </div>
-
-          <div class="actions">
-            <button id="submitSeek" class="btn">Submit Request</button>
-          </div>
-        </section>
-      </div>
-    </main>
-
-    <footer class="footer" role="contentinfo">
-      <div>BNI Rock Solid Referrals</div>
-    </footer>
-  </div>
-
-  <!-- STICKY "Powered by Segwik" BADGE -->
-  <a class="powered-by" href="https://segwik.com/" aria-label="Powered by Segwik (opens portal)" target="_blank" rel="noopener">
-    <span>Powered by</span>
-    <img src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854883923.png" alt="Segwik">
-  </a>
-
-  <!-- Success Modal -->
-  <div class="modal" id="successModal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
-    <div class="modal-card">
-      <h3 id="successTitle">Request Submitted</h3>
-      <p>Your Seek of the Week was submitted successfully.</p>
-      <div class="actions" style="justify-content:center;">
-        <a href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-page" class="btn" id="goViewRequests">View Seek of The Week Submissions</a>
-        <button class="btn" style="background:#f3f4f6; color:#111; border:1px solid var(--line);" id="closeModal" type="button">Close</button>
-      </div>
-    </div>
-  </div>
 
 <script>
-/* Minimal local persistence for testing */
-const STORAGE_KEY = "bni_seeks_submit_only_v5";
-function saveSubmission(data){
-  const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  list.unshift(data);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-}
+  // =========================================================
+  // SEEK SUBMISSION LOGIC (DIRECTORY-COMPATIBLE)
+  // - Type switching
+  // - localStorage persistence
+  // - success modal
+  // =========================================================
 
-/* Helpers */
-const $ = (s, el=document) => el.querySelector(s);
-const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
-const uid = () => Math.random().toString(36).slice(2,9);
+  const STORAGE_KEY = "bni_seeks_submit_only_v5";
 
-/* Type switching (distinct fields per choice) */
-const typeChoices = $("#seekTypeChoices");
-const fields = {
-  person: $("#fields-person"),
-  company: $("#fields-company"),
-  persona: $("#fields-persona")
-};
-let currentType = "person";
+  function saveSubmission(data){
+    const list = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    list.unshift(data);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  }
 
-function switchType(type){
-  currentType = type;
-  $$(".choice", typeChoices).forEach(c => {
-    const active = c.dataset.type === type;
-    c.classList.toggle("active", active);
-    c.setAttribute("aria-selected", active ? "true" : "false");
-  });
-  Object.keys(fields).forEach(k => fields[k].classList.toggle("hidden", k !== type));
-}
-typeChoices.addEventListener("click", (e) => {
-  const t = e.target.closest(".choice");
-  if(!t) return;
-  switchType(t.dataset.type);
-});
+  const $ = (s, el=document) => el.querySelector(s);
+  const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+  const uid = () => Math.random().toString(36).slice(2,9);
 
-/* Links (replace with real URL) */
-const requestsHref = "https://kakatbarilea-prog.github.io/bni-seek-of-the-week-submissions";
-$("#viewRequestsTop").href = requestsHref;
-$("#goViewRequests").href = requestsHref;
+  const requestsHref = "https://kakatbarilea-prog.github.io/bni-seek-of-the-week-submissions/";
+  $("#rsViewSubmissionsTop").href = requestsHref;
+  $("#rsGoViewRequests").href = requestsHref;
 
-
-/* Submit handling */
-function resetForm(){
-  $$('input[type="text"], textarea').forEach(i => i.value = "");
-  const sel1 = $("#personaSeniority"); if(sel1) sel1.value = "";
-  const sel2 = $("#personaIndustry");  if(sel2) sel2.value = "";
-  switchType("person");
-}
-
-$("#submitSeek").addEventListener("click", () => {
-  const payload = {
-    id: uid(),
-    type: currentType,
-    createdAt: Date.now(),
-    whatActions: $("#whatActions").value.trim(),
-    whatSay: $("#whatSay").value.trim(),
-    notes: $("#notes").value.trim()
+  const typeChoices = $("#rsSeekTypeChoices");
+  const fields = {
+    person: $("#rsFieldsPerson"),
+    company: $("#rsFieldsCompany"),
+    persona: $("#rsFieldsPersona")
   };
 
-  if(currentType === "person"){
-    payload.personFirst = $("#personFirst").value.trim();
-    payload.personLast  = $("#personLast").value.trim();
-    payload.personCompany = $("#personCompany").value.trim();
-    if(!(payload.personFirst || payload.personLast)){
-      alert("Please provide at least a first or last name.");
-      return;
-    }
-  } else if(currentType === "company"){
-    payload.companyName = $("#companyName").value.trim();
-    if(!payload.companyName){
-      alert("Please provide a company name.");
-      return;
-    }
-  } else { // persona
-    payload.personaIndustry  = $("#personaIndustry").value;
-    payload.personaTitle     = $("#personaTitle").value.trim();
-    payload.personaSeniority = $("#personaSeniority").value;
-    if(!(payload.personaIndustry || payload.personaTitle || payload.personaSeniority)){
-      alert("Please provide at least one field (industry, job title, or seniority).");
-      return;
-    }
+  let currentType = "person";
+
+  function switchType(type){
+    currentType = type;
+
+    $$(".rs-choice", typeChoices).forEach(btn => {
+      const active = btn.dataset.type === type;
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    Object.keys(fields).forEach(k => {
+      fields[k].classList.toggle("rs-hidden", k !== type);
+    });
   }
 
-  saveSubmission(payload);
-  $("#successModal").classList.add("open");
-});
+  typeChoices.addEventListener("click", (e) => {
+    const btn = e.target.closest(".rs-choice");
+    if(!btn) return;
+    switchType(btn.dataset.type);
+  });
 
-/* Close modal => reset form */
-$("#closeModal").addEventListener("click", () => {
-  $("#successModal").classList.remove("open");
-  resetForm();
-});
-document.addEventListener("keydown", (e) => {
-  if(e.key === "Escape" && $("#successModal").classList.contains("open")){
-    $("#successModal").classList.remove("open");
-    resetForm();
+  function resetForm(){
+    $$('input[type="text"], textarea').forEach(i => i.value = "");
+    const sel1 = $("#rsPersonaSeniority"); if(sel1) sel1.value = "";
+    const sel2 = $("#rsPersonaIndustry");  if(sel2) sel2.value = "";
+    switchType("person");
   }
-});
-$("#successModal").addEventListener("click", (e) => {
-  if(e.target.id === "successModal"){
-    $("#successModal").classList.remove("open");
+
+  $("#rsResetSeek").addEventListener("click", resetForm);
+
+  $("#rsSubmitSeek").addEventListener("click", () => {
+    const payload = {
+      id: uid(),
+      type: currentType,
+      createdAt: Date.now(),
+      whatActions: $("#rsWhatActions").value.trim(),
+      whatSay: $("#rsWhatSay").value.trim(),
+      notes: $("#rsNotes").value.trim()
+    };
+
+    if(currentType === "person"){
+      payload.personFirst = $("#rsPersonFirst").value.trim();
+      payload.personLast  = $("#rsPersonLast").value.trim();
+      payload.personCompany = $("#rsPersonCompany").value.trim();
+
+      if(!(payload.personFirst || payload.personLast)){
+        alert("Please provide at least a first or last name.");
+        return;
+      }
+
+    }else if(currentType === "company"){
+      payload.companyName = $("#rsCompanyName").value.trim();
+      if(!payload.companyName){
+        alert("Please provide a company name.");
+        return;
+      }
+
+    }else{
+      payload.personaIndustry  = $("#rsPersonaIndustry").value;
+      payload.personaTitle     = $("#rsPersonaTitle").value.trim();
+      payload.personaSeniority = $("#rsPersonaSeniority").value;
+
+      if(!(payload.personaIndustry || payload.personaTitle || payload.personaSeniority)){
+        alert("Please provide at least one field (industry, job title, or seniority).");
+        return;
+      }
+    }
+
+    saveSubmission(payload);
+    $("#rsSuccessModal").classList.add("open");
+  });
+
+  // modal close behaviors
+  $("#rsCloseModal").addEventListener("click", () => {
+    $("#rsSuccessModal").classList.remove("open");
     resetForm();
-  }
-});
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape" && $("#rsSuccessModal").classList.contains("open")){
+      $("#rsSuccessModal").classList.remove("open");
+      resetForm();
+    }
+  });
+
+  $("#rsSuccessModal").addEventListener("click", (e) => {
+    if(e.target.id === "rsSuccessModal"){
+      $("#rsSuccessModal").classList.remove("open");
+      resetForm();
+    }
+  });
+
+  // init
+  switchType("person");
 </script>
-</body>
-</html>
+
+
+<!--end-->
+
+
+
+<footer class="rs-footer" role="contentinfo">
+  <div class="rs-footer__inner">
+
+    <div class="rs-footer__grid">
+
+      <!-- Brand -->
+      <div class="rs-footer__brand">
+        <img
+          class="rs-footer__logo"
+          src="https://d34hmiuaex7c0.cloudfront.net/6568/uploads/cmaspages/gallery/galleryitem_1759854726598.png"
+          alt="BNI Rock Solid Referrals"
+        />
+        <p class="rs-footer__desc">
+          BNI Rock Solid Referrals is a structured network of trusted local professionals —
+          built on consistency, credibility, and referrals that convert.
+        </p>
+      </div>
+
+      <!-- Explore -->
+      <div class="rs-footer__col">
+        <h4>Explore</h4>
+        <a href="https://kakatbarilea-prog.github.io/bni-homepage/">Home</a>
+        <a href="#">Chapter Members</a>
+        <a href="#">Meetings &amp; Events</a>
+        <a href="#">Gallery</a>
+      </div>
+
+      <!-- Members -->
+      <div class="rs-footer__col">
+        <h4>Members</h4>
+        <a href="#">Member Log-in</a>
+        <a href="https://kakatbarilea-prog.github.io/bni-chamber-members-directory/">Member Directory</a>
+        <a href="#">Request a 1-to-1</a>
+        <a href="#">Share a Referral</a>
+        <a href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-page/">Submit Seek of the Week</a>
+        <a href="https://kakatbarilea-prog.github.io/bni-seek-of-the-week-submissions/">View Seeks of the Week</a>
+      </div>
+
+    </div>
+
+    <div class="rs-footer__bottom">
+      <div class="rs-footer__bottomLeft">
+        © <span id="rsFooterYear"></span> BNI Rock Solid Referrals&nbsp;&nbsp;•&nbsp;&nbsp;Powered by Segwik
+      </div>
+
+      <div class="rs-footer__bottomRight">
+        <a href="#">Privacy Policy</a>
+        <span class="rs-footer__sep">|</span>
+        <a href="#">Terms &amp; Conditions</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  /* -------- FOOTER ONLY VARIABLES (scoped) -------- */
+  .rs-footer{
+    --rs-red:#CF2030;
+    --rs-bg:#333333;
+    --rs-text:#ffffff;
+    --rs-muted: rgba(255,255,255,.82);
+    --rs-line: rgba(255,255,255,.14);
+  }
+
+  /* Scope all typography + box sizing to footer only */
+  .rs-footer, .rs-footer *{
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing:border-box;
+  }
+
+  .rs-footer{
+    width:100%;
+    background: var(--rs-bg);
+    color: var(--rs-text);
+    border-top: 4px solid var(--rs-red);
+  }
+
+  .rs-footer__inner{
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    padding:42px 22px 18px;
+  }
+
+  .rs-footer__grid{
+    display:grid;
+    grid-template-columns: 2.2fr 1fr 1fr;
+    gap:28px;
+    align-items:start;
+  }
+
+  /* Prevent logo stretch */
+  .rs-footer__logo{
+    height:34px;
+    width:auto;
+    max-width:220px;
+    object-fit:contain;
+    display:block;
+  }
+
+  .rs-footer__desc{
+    margin:12px 0 0;
+    font-weight:400;
+    font-size:14px;
+    line-height:1.6;
+    max-width:560px;
+    color: var(--rs-muted);
+  }
+
+  .rs-footer__col h4{
+    margin:0 0 12px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:#fff;
+    position:relative;
+  }
+  .rs-footer__col h4::after{
+    content:"";
+    display:block;
+    width:42px;
+    height:2px;
+    border-radius:999px;
+    background: var(--rs-red);
+    margin-top:10px;
+    opacity:.95;
+  }
+
+  .rs-footer__col a{
+    display:block;
+    width:max-content;
+    margin:10px 0;
+    font-weight:400;
+    font-size:14px;
+    color: var(--rs-muted);
+    text-decoration:none;
+    transition:.15s ease;
+  }
+  .rs-footer__col a:hover{
+    color:#fff;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+
+  .rs-footer__bottom{
+    margin-top:22px;
+    padding-top:14px;
+    border-top:1px solid var(--rs-line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    font-size:13px;
+    color: var(--rs-muted);
+  }
+
+  .rs-footer__bottomLeft{font-weight:400}
+
+  .rs-footer__bottomRight{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:400;
+  }
+  .rs-footer__bottomRight a{
+    color: var(--rs-muted);
+    text-decoration:none;
+    transition:.15s ease;
+  }
+  .rs-footer__bottomRight a:hover{
+    color:#fff;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+  .rs-footer__sep{opacity:.5}
+
+  /* Mobile polish */
+  @media (max-width: 860px){
+    .rs-footer__grid{
+      grid-template-columns: 1fr 1fr;
+    }
+    .rs-footer__brand{
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 520px){
+    .rs-footer__inner{
+      padding:34px 16px 14px;
+    }
+
+    .rs-footer__grid{
+      grid-template-columns: 1fr;
+      gap:18px;
+    }
+
+    /* Make columns feel like sections on mobile */
+    .rs-footer__col{
+      padding-top:10px;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+
+    .rs-footer__col a{
+      width:100%;
+      padding:10px 0;
+      margin:0;
+    }
+
+    .rs-footer__bottom{
+      flex-direction:column;
+      align-items:flex-start;
+      gap:8px;
+    }
+  }
+</style>
+
+<script>
+  document.getElementById("rsFooterYear").textContent = new Date().getFullYear();
+</script>
